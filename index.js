@@ -23,11 +23,43 @@ mongoose.connect(MONGOURL).then(() => {
     console.log("Error during connection to database: " + error);
 });
 
+//Job schema
+const jobSchema = new mongoose.Schema({
+    companyname: {
+        type: String,
+        required: true
+    },
+    jobtitle: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    }
+});
+
+const Job = mongoose.model("Job", jobSchema);
+
 //Routes
 app.get("/", (req, res) => {
     res.render("index");
 });
 
 app.get("/api", (req, res) => {
-    res.json({ message: "välkommen till mitt API" })
+    res.json({ message: "Välkommen till mitt API" })
+});
+
+app.get("/jobs", async(req, res) => {
+    try {
+        let result = await Job.find({});
+
+        return res.json(result);
+    } catch(error) {
+        return res.status(500).json(error);
+    }
 });
