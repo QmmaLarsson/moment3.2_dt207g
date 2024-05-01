@@ -60,6 +60,18 @@ app.get("/jobs", async(req, res) => {
 
         return res.json(result);
     } catch(error) {
+        //Errorhantering
         return res.status(500).json(error);
+    }
+});
+
+app.post("/jobs", async(req, res) => {
+    try {
+        let result = await Job.create(req.body);
+        
+        return res.json(result);
+    } catch(error) {
+        //Errorhantering
+        return res.status(400).json(error);
     }
 });
