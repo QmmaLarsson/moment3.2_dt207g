@@ -27,19 +27,19 @@ mongoose.connect(MONGOURL).then(() => {
 const jobSchema = new mongoose.Schema({
     companyname: {
         type: String,
-        required: true
+        required: [true, "Du måste fylla i företagsnamn."]
     },
     jobtitle: {
         type: String,
-        required: true
+        required: [true, "Du måste fylla i jobbtitel."]
     },
     location: {
         type: String,
-        required: true
+        required: [true, "Du måste fylla i plats."]
     },
     description: {
         type: String,
-        required: true
+        required: [true, "Du måste fylla i beskrivning."]
     }
 });
 
@@ -54,6 +54,7 @@ app.get("/api", (req, res) => {
     res.json({ message: "Välkommen till mitt API" })
 });
 
+//GET-rout
 app.get("/jobs", async(req, res) => {
     try {
         let result = await Job.find({});
@@ -65,9 +66,39 @@ app.get("/jobs", async(req, res) => {
     }
 });
 
+//POST-rout
 app.post("/jobs", async(req, res) => {
     try {
         let result = await Job.create(req.body);
+        
+        return res.json(result);
+    } catch(error) {
+        //Errorhantering
+        return res.status(400).json(error);
+    }
+});
+
+//PUT-rout
+app.put("/jobs/:id", async(req, res) => {
+    try {
+        const jobId = req.params.id;
+        const updatedJob = req.body;
+
+        const result = await Job.findByIdAndUpdate(jobId, updatedJob, {new: true});
+        
+        return res.json(result);
+    } catch(error) {
+        //Errorhantering
+        return res.status(400).json(error);
+    }
+});
+
+//DELETE-rout
+app.delete("/jobs/:id", async(req, res) => {
+    try {
+        const jobId = req.params.id;
+
+        const result = await Job.findByIdAndDelete(jobId);
         
         return res.json(result);
     } catch(error) {
