@@ -55,54 +55,54 @@ app.get("/api", (req, res) => {
 });
 
 //GET-rout
-app.get("/jobs", async(req, res) => {
+app.get("/jobs", async (req, res) => {
     try {
         let result = await Job.find({});
 
         return res.json(result);
-    } catch(error) {
+    } catch (error) {
         //Errorhantering
-        return res.status(500).json(error);
+        return res.status(500).json({ message: "Det uppstod ett fel vid hämtning av jobb.", error: error });
     }
 });
 
 //POST-rout
-app.post("/jobs", async(req, res) => {
+app.post("/jobs", async (req, res) => {
     try {
         let result = await Job.create(req.body);
-        
+
         return res.json(result);
-    } catch(error) {
+    } catch (error) {
         //Errorhantering
-        return res.status(400).json(error);
+        return res.status(400).json({ message: "Det uppstod ett fel vid lagring av jobb.", error: error });
     }
 });
 
 //PUT-rout
-app.put("/jobs/:id", async(req, res) => {
+app.put("/jobs/:id", async (req, res) => {
     try {
         const jobId = req.params.id;
         const updatedJob = req.body;
 
-        const result = await Job.findByIdAndUpdate(jobId, updatedJob, {new: true});
-        
+        const result = await Job.findByIdAndUpdate(jobId, updatedJob, { new: true });
+
         return res.json(result);
-    } catch(error) {
+    } catch (error) {
         //Errorhantering
-        return res.status(400).json(error);
+        return res.status(400).json({ message: "Det uppstod ett fel vid uppdatering av jobb.", error: error });
     }
 });
 
 //DELETE-rout
-app.delete("/jobs/:id", async(req, res) => {
+app.delete("/jobs/:id", async (req, res) => {
     try {
         const jobId = req.params.id;
 
         const result = await Job.findByIdAndDelete(jobId);
-        
+
         return res.json(result);
-    } catch(error) {
+    } catch (error) {
         //Errorhantering
-        return res.status(400).json(error);
+        return res.status(400).json({ message: "Det uppstod ett fel vid borttagning av jobb.", error: error });
     }
 });
